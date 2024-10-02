@@ -1154,7 +1154,12 @@ private:
 	stateResult_t			State_Legs_Land					( const stateParms_t& parms );
 	stateResult_t			State_Legs_Dead					( const stateParms_t& parms );
 	
- 	CLASS_STATES_PROTOTYPE( idPlayer );
+	idEntity*	poisoner;
+	float		poisonDamage;
+	uint32_t	poisonCooldown;
+	uint32_t	poisonCooldownMax;
+	uint32_t	poisonTTL;
+	CLASS_STATES_PROTOTYPE( idPlayer );
 };
 
 ID_INLINE bool idPlayer::IsBeingTalkedTo( void ) {

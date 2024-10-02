@@ -577,6 +577,55 @@ void Cmd_CenterView_f( const idCmdArgs &args ) {
 }
 
 /*
+++++++++++++++++++
+Cmd_Locate_f
+
+locate player
+++++++++++++++++++
+*/
+void Cmd_Locate_f(const idCmdArgs& args) {
+	idPlayer* player;
+	idVec3 origin;
+
+	player = gameLocal.GetLocalPlayer();
+	if (!player || !gameLocal.CheatsOk()) {
+		//error message here
+		return;
+	}
+
+	origin = player->GetEyePosition();
+
+	gameLocal.Printf("location: (%f,%f,%f)", origin.x, origin.y, origin.z);
+}
+
+/*
+++++++++++++++++++
+Cmd_Dir_f
+
+find player direction
+++++++++++++++++++
+*/
+void Cmd_Dir_f(const idCmdArgs & args) {
+	idPlayer* player;
+	idVec3 dir;
+	idVec3 playerViewOrigin;
+	idMat3 playerViewAxis;
+
+	player = gameLocal.GetLocalPlayer();
+	if (!player || !gameLocal.CheatsOk()) {
+		//error message here
+		return;
+	}
+
+	//origin = player->GetEyePosition();
+	playerViewOrigin = player->firstPersonViewOrigin;
+	playerViewAxis = player->firstPersonViewAxis;
+	dir = playerViewAxis[0] + playerViewAxis[2];
+
+	gameLocal.Printf("location: (%f,%f,%f)", dir.x, dir.y, dir.z);
+}
+
+/*
 ==================
 Cmd_God_f
 
@@ -3231,8 +3280,10 @@ void idGameLocal::InitConsoleCommands( void ) {
 // squirrel: Mode-agnostic buymenus
 	cmdSystem->AddCommand( "buyMenu",				Cmd_ToggleBuyMenu_f,		CMD_FL_GAME,				"Toggle buy menu (if in a buy zone and the game type supports it)" );
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
+	
 // RITUAL END
-
+	cmdSystem->AddCommand("locate", Cmd_Locate_f, CMD_FL_GAME, "Print the player location to the screen");
+	cmdSystem->AddCommand("dir", Cmd_Dir_f, CMD_FL_GAME, "Print the player direction to the screen");
 }
 
 /*

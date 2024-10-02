@@ -2711,6 +2711,13 @@ void rvWeapon::LaunchProjectiles ( idDict& dict, const idVec3& muzzleOrigin, con
 			muzzle_pos = tr.endpos;
 		}
 		
+		//rocketFun
+		//make the rocket spawn above the player and face down towards them
+		idVec3 sky_distance(0, 0, 150);
+		muzzle_pos = muzzle_pos + sky_distance;
+		//idVec3 falling_dir(0, 0, 0);
+		//dir = dir + falling_dir;
+
 		// Launch the actual projectile
 		proj->Launch( muzzle_pos + startOffset, dir, pushVelocity, fuseOffset, power );
 		
@@ -2730,6 +2737,33 @@ void rvWeapon::OnLaunchProjectile ( idProjectile* proj ) {
 	if ( proj ) {
 		proj->methodOfDeath = owner->GetCurrentWeapon();
 	}
+
+	//rocketFun
+	GiveStuffToPlayer(owner, "ammo", "");
+	//Spawn("char_marine_medic");
+	const char* key, * value;
+	int			i;
+	float		yaw;
+	idVec3		org;
+	idPlayer* player;
+	idDict		dict;
+
+	yaw = player->viewAngles.yaw;
+
+	value = "char_marine_medic";
+	dict.Set("classname", value);
+	dict.Set("angle", va("%f", yaw + 180));
+
+	org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+	dict.Set("origin", org.ToString());
+
+	idEntity* newEnt = NULL;
+	gameLocal.SpawnEntityDef(dict, &newEnt);
+
+	if (newEnt) {
+		gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
+	}
+	//rocketFun end
 }
 
 /*
