@@ -782,15 +782,15 @@ stateResult_t rvWeaponLightningGun::State_Idle( const stateParms_t& parms ) {
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			SetStatus( WP_READY );
-			PlayCycle( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
-			StopSound( SND_CHANNEL_BODY3, false );
-			StartSound( "snd_idle_hum", SND_CHANNEL_BODY3, 0, false, NULL );
+			//PlayCycle( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
+			//StopSound( SND_CHANNEL_BODY3, false );
+			//StartSound( "snd_idle_hum", SND_CHANNEL_BODY3, 0, false, NULL );
 
 			return SRESULT_STAGE( STAGE_WAIT );
 		
 		case STAGE_WAIT:
 			if ( wsfl.lowerWeapon ) {
-				StopSound( SND_CHANNEL_BODY3, false );
+				//StopSound( SND_CHANNEL_BODY3, false );
 				SetState( "Lower", 4 );
 				return SRESULT_DONE;
 			}
@@ -817,46 +817,46 @@ stateResult_t rvWeaponLightningGun::State_Fire( const stateParms_t& parms ) {
 	};	
 	switch ( parms.stage ) {
 		case STAGE_INIT:
-			StartSound( "snd_fire", SND_CHANNEL_WEAPON, 0, false, NULL );
-			StartSound( "snd_fire_stereo", SND_CHANNEL_ITEM, 0, false, NULL );
-			StartSound( "snd_fire_loop", SND_CHANNEL_BODY2, 0, false, NULL );
+			//StartSound( "snd_fire", SND_CHANNEL_WEAPON, 0, false, NULL );
+			//StartSound( "snd_fire_stereo", SND_CHANNEL_ITEM, 0, false, NULL );
+			//StartSound( "snd_fire_loop", SND_CHANNEL_BODY2, 0, false, NULL );
 			
-			viewModel->SetShaderParm( 6, 0 );
+			//viewModel->SetShaderParm( 6, 0 );
 
-			viewModel->PlayEffect( "fx_spire", spireJointView, true );
-			viewModel->PlayEffect( "fx_flash", barrelJointView, true );
+			//viewModel->PlayEffect( "fx_spire", spireJointView, true );
+			//viewModel->PlayEffect( "fx_flash", barrelJointView, true );
 
-			if ( worldModel && flashJointWorld != INVALID_JOINT ) {
-  				worldModel->PlayEffect( gameLocal.GetEffect( weaponDef->dict,"fx_flash_world"), flashJointWorld, vec3_origin, mat3_identity, true );
-  			}
+			//if ( worldModel && flashJointWorld != INVALID_JOINT ) {
+  				//worldModel->PlayEffect( gameLocal.GetEffect( weaponDef->dict,"fx_flash_world"), flashJointWorld, vec3_origin, mat3_identity, true );
+  			//}
 
-			PlayAnim( ANIMCHANNEL_ALL, "shoot_start", parms.blendFrames );
+			//PlayAnim( ANIMCHANNEL_ALL, "shoot_start", parms.blendFrames );
 			return SRESULT_STAGE( STAGE_ATTACKLOOP );
 		
 		case STAGE_ATTACKLOOP:
 			if ( !wsfl.attack || wsfl.lowerWeapon || !AmmoAvailable ( ) ) {
 				return SRESULT_STAGE ( STAGE_DONE );
 			}
-			if ( AnimDone( ANIMCHANNEL_ALL, 0 ) ) {
-				PlayCycle( ANIMCHANNEL_ALL, "shoot_loop", 0 );
-				if ( !gameLocal.isMultiplayer
-					&& owner == gameLocal.GetLocalPlayer() ) {
-					owner->playerView.SetShakeParms( MS2SEC(gameLocal.GetTime() + 500), 2.0f );
-				}
-			}
+			//if ( AnimDone( ANIMCHANNEL_ALL, 0 ) ) {
+				//PlayCycle( ANIMCHANNEL_ALL, "shoot_loop", 0 );
+				//if ( !gameLocal.isMultiplayer
+					//&& owner == gameLocal.GetLocalPlayer() ) {
+					//owner->playerView.SetShakeParms( MS2SEC(gameLocal.GetTime() + 500), 2.0f );
+				//}
+			//}
 			return SRESULT_WAIT;
 						
 		case STAGE_DONE:
-			StopSound( SND_CHANNEL_BODY2, false );
+			//StopSound( SND_CHANNEL_BODY2, false );
 
-			viewModel->StopEffect( "fx_spire" );
-			viewModel->StopEffect( "fx_flash" );
- 			if ( worldModel ) {
-  				worldModel->StopEffect( gameLocal.GetEffect( weaponDef->dict, "fx_flash_world" ) );
-  			}
-			viewModel->SetShaderParm( 6, 1 );
+			//viewModel->StopEffect( "fx_spire" );
+			//viewModel->StopEffect( "fx_flash" );
+ 			//if ( worldModel ) {
+  				//worldModel->StopEffect( gameLocal.GetEffect( weaponDef->dict, "fx_flash_world" ) );
+  			//}
+			//viewModel->SetShaderParm( 6, 1 );
 
-			PlayAnim( ANIMCHANNEL_ALL, "shoot_end", 0 );
+			//PlayAnim( ANIMCHANNEL_ALL, "shoot_end", 0 );
 			return SRESULT_STAGE( STAGE_DONEWAIT );
 			
 		case STAGE_DONEWAIT:
@@ -921,7 +921,8 @@ void rvLightningPath::UpdateEffects ( const idVec3& from, const idDict& dict ) {
 	dir.Normalize();
 	
 	// Trail effect
-	if ( !trailEffect ) {
+	/*
+	if (!trailEffect) {
 		trailEffect = gameLocal.PlayEffect ( gameLocal.GetEffect ( dict, "fx_trail_world" ), from, dir.ToMat3(), true, origin );		
 	} else {
 		trailEffect->SetOrigin ( from );
@@ -943,7 +944,8 @@ void rvLightningPath::UpdateEffects ( const idVec3& from, const idDict& dict ) {
 			impactEffect->SetOrigin ( origin );
 			impactEffect->SetAxis ( normal.ToMat3 ( ) );
 		}
-	}		
+	}	
+	*/
 }
 
 /*

@@ -96,7 +96,7 @@ rvHealingStation::BeginHealing
 */
 void rvHealingStation::BeginHealing ( idEntity *toHeal ) {
 	entityToHeal	= toHeal;
-	stateThread.SetState( "Healing" );
+	stateThread.SetState( "Cooking" );
 }
 
 /*
@@ -151,7 +151,7 @@ bool rvHealingStation::IsPlaying ( void ) {
 */
 
 CLASS_STATES_DECLARATION ( rvHealingStation )
-	STATE ( "Healing",		rvHealingStation::State_Healing )
+	STATE ( "Cooking",		rvHealingStation::State_Healing )
 END_CLASS_STATES
 
 /*
@@ -165,6 +165,8 @@ stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
 		STAGE_WAIT,
 		STAGE_DISPENSE,
 	};
+
+	//if player has the proper ingredients, start cooking
 
 	if ( entityToHeal.IsValid() ) {
 		idPlayer* player = static_cast<idPlayer*>( entityToHeal.GetEntity( ) );

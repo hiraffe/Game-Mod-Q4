@@ -660,26 +660,26 @@ stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
 			if ( !wsfl.attack || wsfl.reload || wsfl.lowerWeapon || AmmoInClip ( ) <= 0 ) {
 				return SRESULT_STAGE ( STAGE_DONE );
 			}
-			if ( mods & NAILGUN_MOD_ROF_AMMO ) {
-				PlayCycle ( ANIMCHANNEL_LEGS, "fire_fast", 4 );
-			} else {
-				PlayCycle ( ANIMCHANNEL_LEGS, "fire_slow", 4 );
-			}
+			//if ( mods & NAILGUN_MOD_ROF_AMMO ) {
+				//PlayCycle ( ANIMCHANNEL_LEGS, "fire_fast", 4 );
+			//} else {
+				//PlayCycle ( ANIMCHANNEL_LEGS, "fire_slow", 4 );
+			//}
 
 			if ( wsfl.zoom ) {				
-				Attack ( true, 1, spread, 0.0f, 1.0f );
+				//Attack ( true, 1, spread, 0.0f, 1.0f );
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			} else {
-				Attack ( false, 1, spread, 0.0f, 1.0f );
+				//Attack ( false, 1, spread, 0.0f, 1.0f );
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			}
 			
 			// Play the exhaust effects
-			viewModel->PlayEffect ( "fx_exhaust", jointSteamRightView, false );
-			viewModel->PlayEffect ( "fx_exhaust", jointSteamLeftView, false );
+			//viewModel->PlayEffect ( "fx_exhaust", jointSteamRightView, false );
+			//viewModel->PlayEffect ( "fx_exhaust", jointSteamLeftView, false );
 
-			viewModel->StartSound ( "snd_fire", SND_CHANNEL_WEAPON,	0, false, NULL );
-			viewModel->StartSound ( "snd_fireStereo", SND_CHANNEL_ITEM, 0, false, NULL ); 
+			//viewModel->StartSound ( "snd_fire", SND_CHANNEL_WEAPON,	0, false, NULL );
+			//viewModel->StartSound ( "snd_fireStereo", SND_CHANNEL_ITEM, 0, false, NULL ); 
 					
 			return SRESULT_STAGE ( STAGE_FIREWAIT );
 
@@ -694,10 +694,10 @@ stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
 			
 		case STAGE_DONE:
 			if ( clipSize && wsfl.attack && !wsfl.lowerWeapon && !wsfl.reload ) {
-				PlayCycle ( ANIMCHANNEL_LEGS, "spinempty", 4 );
+				//PlayCycle ( ANIMCHANNEL_LEGS, "spinempty", 4 );
 				return SRESULT_STAGE ( STAGE_SPINEMPTY );
 			}
-			DrumSpin ( NAILGUN_DRUMSPEED_SLOW, 4 );
+			//DrumSpin ( NAILGUN_DRUMSPEED_SLOW, 4 );
 			if ( !wsfl.attack && !AmmoInClip() && AmmoAvailable() && AutoReload ( ) && !wsfl.lowerWeapon ) {
 				PostState ( "Reload", 4 );
 			} else {
@@ -752,7 +752,7 @@ stateResult_t rvWeaponNailgun::State_Reload ( const stateParms_t& parms ) {
 			return SRESULT_STAGE( STAGE_RELOAD );
 			
 		case STAGE_RELOAD:
-			PlayAnim( ANIMCHANNEL_LEGS, "reload", parms.blendFrames );
+			//PlayAnim( ANIMCHANNEL_LEGS, "reload", parms.blendFrames );
 			return SRESULT_STAGE( STAGE_RELOADWAIT );
 			
 		case STAGE_RELOADWAIT:
@@ -768,7 +768,7 @@ stateResult_t rvWeaponNailgun::State_Reload ( const stateParms_t& parms ) {
 			return SRESULT_WAIT;
 		
 		case STAGE_RELOADLEFT:
-			PlayAnim ( ANIMCHANNEL_LEGS, "reload_clip1hold", parms.blendFrames );
+			//PlayAnim ( ANIMCHANNEL_LEGS, "reload_clip1hold", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_RELOADLEFTWAIT );
 			
 		case STAGE_RELOADLEFTWAIT:
@@ -786,7 +786,7 @@ stateResult_t rvWeaponNailgun::State_Reload ( const stateParms_t& parms ) {
 			if ( wsfl.attack || AmmoInClip() >= ClipSize() || !AmmoAvailable() ) {
 				return SRESULT_STAGE ( STAGE_RELOADDONE );
 			}
-			PlayAnim ( ANIMCHANNEL_LEGS, "reload_clip2", 0 );
+			//PlayAnim ( ANIMCHANNEL_LEGS, "reload_clip2", 0 );
 			return SRESULT_STAGE ( STAGE_RELOADRIGHTWAIT );
 			
 		case STAGE_RELOADRIGHTWAIT:
@@ -802,7 +802,7 @@ stateResult_t rvWeaponNailgun::State_Reload ( const stateParms_t& parms ) {
 			return SRESULT_WAIT;
 		
 		case STAGE_RELOADDONE:
-			PlayAnim ( ANIMCHANNEL_LEGS, "reload_clip1finish", 0 );
+			//PlayAnim ( ANIMCHANNEL_LEGS, "reload_clip1finish", 0 );
 			return SRESULT_STAGE ( STAGE_RELOADDONEWAIT );
 		
 		case STAGE_RELOADDONEWAIT:
@@ -834,7 +834,7 @@ stateResult_t rvWeaponNailgun::State_DrumSpinUp ( const stateParms_t& parms ) {
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			viewModel->StartSound ( "snd_spinup", NAILGUN_SPIN_SNDCHANNEL, 0, false, NULL);
-			PlayAnim ( ANIMCHANNEL_LEGS, "spinup", 4 );
+			//PlayAnim ( ANIMCHANNEL_LEGS, "spinup", 4 );
 			return SRESULT_STAGE(STAGE_WAIT);
 		
 		case STAGE_WAIT:
@@ -846,7 +846,7 @@ stateResult_t rvWeaponNailgun::State_DrumSpinUp ( const stateParms_t& parms ) {
 			if ( !wsfl.attack ) {
 				int oldSpeed = drumSpeed;
 				drumSpeed = drumSpeedIdeal;
-				DrumSpin ( oldSpeed, 0 );
+				//DrumSpin ( oldSpeed, 0 );
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
@@ -871,7 +871,7 @@ stateResult_t rvWeaponNailgun::State_DrumSpinDown ( const stateParms_t& parms ) 
 			viewModel->StartSound ( "snd_spindown", SND_CHANNEL_ANY, 0, false, 0 );
 
 			// Spin down animation	
-			PlayAnim( ANIMCHANNEL_LEGS, "spindown", parms.blendFrames );
+			//PlayAnim( ANIMCHANNEL_LEGS, "spindown", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
 			
 		case STAGE_WAIT:
@@ -906,7 +906,7 @@ Open the clasp that holds in the clips
 ================
 */
 stateResult_t rvWeaponNailgun::Frame_ClaspOpen ( const stateParms_t& parms ) {
-	PlayAnim ( ANIMCHANNEL_TORSO, "clasp_open", 0 );
+	//PlayAnim ( ANIMCHANNEL_TORSO, "clasp_open", 0 );
 	return SRESULT_OK;
 }
 
@@ -920,10 +920,10 @@ in the gun.
 ================
 */
 stateResult_t rvWeaponNailgun::Frame_ClaspClose ( const stateParms_t& parms ) {
-	if ( mods & NAILGUN_MOD_ROF_AMMO ) {
-		PlayAnim( ANIMCHANNEL_TORSO, "clasp_2clip", 0 );
-	} else {
-		PlayAnim( ANIMCHANNEL_TORSO, "clasp_1clip", 0 );
-	}
+	//if ( mods & NAILGUN_MOD_ROF_AMMO ) {
+		//PlayAnim( ANIMCHANNEL_TORSO, "clasp_2clip", 0 );
+	//} else {
+		//PlayAnim( ANIMCHANNEL_TORSO, "clasp_1clip", 0 );
+	//}
 	return SRESULT_OK;
 }

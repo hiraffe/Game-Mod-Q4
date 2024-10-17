@@ -253,7 +253,7 @@ stateResult_t WeaponNapalmGun::State_Reload( const stateParms_t& parms) {
 	};	
 	switch ( parms.stage ) {
 		case STAGE_INIT:
-			PlayAnim ( ANIMCHANNEL_ALL, "reload", parms.blendFrames );
+			//PlayAnim ( ANIMCHANNEL_ALL, "reload", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
 
 		case STAGE_WAIT:
@@ -289,7 +289,7 @@ stateResult_t WeaponNapalmGun::State_EmptyReload( const stateParms_t& parms ) {
 			}
 			
 			SetStatus ( WP_RELOAD );
-			PlayAnim ( ANIMCHANNEL_ALL, "reload_empty", parms.blendFrames );
+			//PlayAnim ( ANIMCHANNEL_ALL, "reload_empty", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
 			
 		case STAGE_WAIT:
@@ -328,10 +328,10 @@ stateResult_t WeaponNapalmGun::State_Idle( const stateParms_t& parms ) {
 				SetStatus ( WP_READY );
 			}
 		
-			if ( wsfl.zoom )
-				PlayCycle( ANIMCHANNEL_LEGS, "altidle", parms.blendFrames );
-			else
-				PlayCycle( ANIMCHANNEL_LEGS, "idle", parms.blendFrames );
+			//if ( wsfl.zoom )
+				//PlayCycle( ANIMCHANNEL_LEGS, "altidle", parms.blendFrames );
+			//else
+				//PlayCycle( ANIMCHANNEL_LEGS, "idle", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
 		
 		case STAGE_WAIT:
@@ -395,21 +395,21 @@ stateResult_t WeaponNapalmGun::State_Fire( const stateParms_t& parms ) {
 		case STAGE_INIT:
 			if ( wsfl.zoom ) {
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( true, 1, spread, 0, 1.0f );
-				PlayAnim ( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
+				//Attack ( true, 1, spread, 0, 1.0f );
+				//PlayAnim ( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
 				//fireHeld = true;
 			} else {
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( false, 1, spread, 0, 1.0f );
+				//Attack ( false, 1, spread, 0, 1.0f );
 
-				int animNum = viewModel->GetAnimator()->GetAnim ( "fire" );
-				if ( animNum ) {
-					idAnim* anim;
-					anim = (idAnim*)viewModel->GetAnimator()->GetAnim ( animNum );				
-					anim->SetPlaybackRate ( (float)anim->Length() / (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE )) );
-				}
+				//int animNum = viewModel->GetAnimator()->GetAnim ( "fire" );
+				//if ( animNum ) {
+					//idAnim* anim;
+					//anim = (idAnim*)viewModel->GetAnimator()->GetAnim ( animNum );				
+					//anim->SetPlaybackRate ( (float)anim->Length() / (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE )) );
+				//}
 
-				PlayAnim ( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
+				//PlayAnim ( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			}
 
 			previousAmmo = AmmoInClip();
