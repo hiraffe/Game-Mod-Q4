@@ -880,8 +880,8 @@ rvWeaponLightningGun::Event_RestoreHum
 ================
 */
 void rvWeaponLightningGun::Event_RestoreHum ( void ) {
-	StopSound( SND_CHANNEL_BODY3, false );
-	StartSound( "snd_idle_hum", SND_CHANNEL_BODY3, 0, false, NULL );
+	//StopSound( SND_CHANNEL_BODY3, false );
+	//StartSound( "snd_idle_hum", SND_CHANNEL_BODY3, 0, false, NULL );
 }
 
 /*
@@ -898,6 +898,7 @@ rvLightningPath::StopEffects
 ================
 */
 void rvLightningPath::StopEffects( void ) {
+	/*
 	if ( trailEffect ) {
 		trailEffect->Stop( );
 		trailEffect->Event_Remove( );
@@ -908,6 +909,7 @@ void rvLightningPath::StopEffects( void ) {
 		impactEffect->PostEventMS( &EV_Remove, 1000 );
 		impactEffect = NULL;
 	}
+	*/
 }
 
 /*
