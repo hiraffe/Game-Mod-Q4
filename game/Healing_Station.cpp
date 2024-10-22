@@ -100,7 +100,7 @@ void rvHealingStation::BeginHealing ( idEntity *toHeal ) {
 	stateThread.SetState( "Cooking" );
 
 	//loop of monsters that need to be fed
-	 const char* hungry[5];
+	/*const char* hungry[5];
 	idEntity* newEnt = NULL;
 	//for (int i = 0; i < 5; i++) {
 		//int recipe = rand() % (5) + 1;
@@ -121,7 +121,7 @@ void rvHealingStation::BeginHealing ( idEntity *toHeal ) {
 			gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
 		}
 	//}
-	//end
+	//end*/
 }
 
 /*
