@@ -434,6 +434,29 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				Attack(false, 10, 10, 0, 0.2f );
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
+				//loop of monsters that need to be fed
+				/*const char* hungry[5];
+				idEntity* newEnt = NULL;
+				for (int i = 0; i < 5; i++) {
+					//int recipe = rand() % (5) + 1;
+					idDict		dict;
+					//idPlayer* player = static_cast<idPlayer*>(entityToHeal.GetEntity());
+					int yaw = player->viewAngles.yaw;
+					dict.Set("angle", va("%f", yaw + 180));
+					idVec3 org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+					dict.Set("origin", org.ToString());
+
+					//if (recipe == 1) {
+					dict.Set("classname", "char_marine_npc_voss_airdefense");
+
+					gameLocal.SpawnEntityDef(dict, &newEnt);
+					hungry[0] = newEnt->name.c_str();
+					//}
+					if (newEnt) {
+						gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
+					}
+				}*/
+				//end
 			}
 			fireHeldTime = 0;
 			

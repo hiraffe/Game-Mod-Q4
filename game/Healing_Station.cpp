@@ -26,6 +26,7 @@ void rvHealingStation::Think ( void ) {
 		}
 		Present();
 	}
+	
 }
 
 /*
@@ -97,6 +98,30 @@ rvHealingStation::BeginHealing
 void rvHealingStation::BeginHealing ( idEntity *toHeal ) {
 	entityToHeal	= toHeal;
 	stateThread.SetState( "Cooking" );
+
+	//loop of monsters that need to be fed
+	 const char* hungry[5];
+	idEntity* newEnt = NULL;
+	//for (int i = 0; i < 5; i++) {
+		//int recipe = rand() % (5) + 1;
+		idDict		dict;
+		idPlayer* player = static_cast<idPlayer*>(entityToHeal.GetEntity());
+		int yaw = player->viewAngles.yaw;
+		dict.Set("angle", va("%f", yaw + 180));
+		idVec3 org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+		dict.Set("origin", org.ToString());
+
+		//if (recipe == 1) {
+		dict.Set("classname", "monster_grunt");	//"char_marine_npc_voss_airdefense");
+
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			//hungry[0] = newEnt->name.c_str();
+		//}
+		if (newEnt) {
+			gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
+		}
+	//}
+	//end
 }
 
 /*
@@ -188,28 +213,7 @@ stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
 					return SRESULT_WAIT;
 
 				case STAGE_DISPENSE:
-					//me
-					gameLocal.Printf("Weapons: %d",player->inventory.weapons);
-					if (player->inventory.weapons == 1049) { //cooking
-						gameLocal.Printf("pizza");
-					}
-					else if (player->inventory.weapons == 1039) { //grilling
-						gameLocal.Printf("burger");
-					}
-					else if (player->inventory.weapons == 737) { //baking
-						gameLocal.Printf("cake");
-					}
-					else if (player->inventory.weapons == 275) { //chopping
-						gameLocal.Printf("salad");
-					}
-					else if (player->inventory.weapons == 769) { //blending
-						gameLocal.Printf("smoothie");
-					}
-					else {
-						gameLocal.Printf("none");
-					}
-					
-					//me end
+
 					if ( gameLocal.time			> nextHealTime ) {	// If it's time to heal...
 						int healthGiven = Min(maxHealth - healthDispensed, Min(healAmount, 50));
 						healthDispensed			+= healthGiven;
@@ -221,10 +225,40 @@ stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
 					return SRESULT_WAIT;
 			}
 		}
+		//me
+		//gameLocal.Printf("Weapons: %d", player->inventory.weapons);
+		if (player->inventory.weapons == 1049) { //cooking
+			gameLocal.Printf("Pizza Cooked\n");
+			idEntity* ent = gameLocal.FindEntity(""); //find the exact name of the monster spawned
+			if (!ent) {
+				gameLocal.Printf("Nobody asked for a pizza.\n");
+			}
+			else {
+				delete ent;
+			}
+
+		}
+		else if (player->inventory.weapons == 1039) { //grilling
+			gameLocal.Printf("Burger Grilled\n");
+		}
+		else if (player->inventory.weapons == 737) { //baking
+			gameLocal.Printf("Cake Baked\n");
+		}
+		else if (player->inventory.weapons == 275) { //chopping
+			gameLocal.Printf("Salad Tossed\n");
+		}
+		else if (player->inventory.weapons == 769) { //blending
+			gameLocal.Printf("Smoothie Blended\n");
+		}
+		else {
+			gameLocal.Printf("None\n");
+		}
 		player->inventory.weapons = 1;
+		//me end
 	}
 
 	StopSound ( SND_CHANNEL_ANY, 0 );
 	StartSound ( "snd_stop", SND_CHANNEL_ANY, 0, false, NULL );
-	return SRESULT_DONE;
+	Spawn();
+	//return SRESULT_DONE;
 }
