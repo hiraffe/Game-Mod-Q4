@@ -156,7 +156,7 @@ END_CLASS_STATES
 
 /*
 ================
-rvHealingStation::State_Healing
+rvHealingStation::State_Healing which is actually state COOKING
 ================
 */
 stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
@@ -166,15 +166,12 @@ stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
 		STAGE_DISPENSE,
 	};
 
-	//if player has the proper ingredients, start cooking
-
+	//check if player has the proper ingredients, start cooking
 	if ( entityToHeal.IsValid() ) {
 		idPlayer* player = static_cast<idPlayer*>( entityToHeal.GetEntity( ) );
-		const int entityMaxHealth = player->inventory.maxHealth;
+		maxHealth = 50;
 		
-		if ( healthDispensed		< maxHealth &&			// and we have health to dispense...
-			 entityToHeal->health	< entityMaxHealth &&	// and the entity needs health.
-			 entityToHeal->health   > 0	)					// and he's still alive.
+		if ( healthDispensed < maxHealth )		// and we have health to dispense...
 		{
 			switch ( parms.stage ) {
 				case STAGE_INIT:
@@ -191,9 +188,30 @@ stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
 					return SRESULT_WAIT;
 
 				case STAGE_DISPENSE:
+					//me
+					gameLocal.Printf("Weapons: %d",player->inventory.weapons);
+					if (player->inventory.weapons == 1049) { //cooking
+						gameLocal.Printf("pizza");
+					}
+					else if (player->inventory.weapons == 1039) { //grilling
+						gameLocal.Printf("burger");
+					}
+					else if (player->inventory.weapons == 737) { //baking
+						gameLocal.Printf("cake");
+					}
+					else if (player->inventory.weapons == 275) { //chopping
+						gameLocal.Printf("salad");
+					}
+					else if (player->inventory.weapons == 769) { //blending
+						gameLocal.Printf("smoothie");
+					}
+					else {
+						gameLocal.Printf("none");
+					}
+					
+					//me end
 					if ( gameLocal.time			> nextHealTime ) {	// If it's time to heal...
-						int healthGiven			= Min( maxHealth - healthDispensed, Min( healAmount, entityMaxHealth - entityToHeal->health ) );
-						entityToHeal->health	+= healthGiven;
+						int healthGiven = Min(maxHealth - healthDispensed, Min(healAmount, 50));
 						healthDispensed			+= healthGiven;
 						nextHealTime			= gameLocal.time + healFrequency;
 					}
@@ -203,6 +221,7 @@ stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
 					return SRESULT_WAIT;
 			}
 		}
+		player->inventory.weapons = 1;
 	}
 
 	StopSound ( SND_CHANNEL_ANY, 0 );
