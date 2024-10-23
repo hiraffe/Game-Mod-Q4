@@ -46,12 +46,15 @@ void rvHealingStation::Spawn ( void ) {
 	maxHealth		= spawnArgs.GetInt( "max_health", "100" );
 
 	dispenseAnim	= GetAnimator()->GetAnim( spawnArgs.GetString( "dispense_anim", "dispense" ) );
+	
+	player = static_cast<idPlayer*>(entityToHeal.GetEntity());
 
 	CreateFrame( 0 );
 
 	stateThread.SetOwner( this );
 	stateThread.SetName( GetName() );
 	GetAnimator()->CycleAnim( ANIMCHANNEL_ALL, GetAnimator()->GetAnim( spawnArgs.GetString( "anim", "idle" ) ), gameLocal.time, 4 );
+
 }
 
 /*
@@ -100,28 +103,46 @@ void rvHealingStation::BeginHealing ( idEntity *toHeal ) {
 	stateThread.SetState( "Cooking" );
 
 	//loop of monsters that need to be fed
-	/*const char* hungry[5];
 	idEntity* newEnt = NULL;
-	//for (int i = 0; i < 5; i++) {
-		//int recipe = rand() % (5) + 1;
-		idDict		dict;
-		idPlayer* player = static_cast<idPlayer*>(entityToHeal.GetEntity());
-		int yaw = player->viewAngles.yaw;
-		dict.Set("angle", va("%f", yaw + 180));
-		idVec3 org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
-		dict.Set("origin", org.ToString());
+	int recipe = rand() % 5;
+	gameLocal.Printf("recipe number: %d\n", recipe);
 
-		//if (recipe == 1) {
-		dict.Set("classname", "monster_grunt");	//"char_marine_npc_voss_airdefense");
-
-			gameLocal.SpawnEntityDef(dict, &newEnt);
-			//hungry[0] = newEnt->name.c_str();
-		//}
-		if (newEnt) {
-			gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
-		}
-	//}
-	//end*/
+	switch (recipe) {
+	case 0:
+		dict.Set("angle", "1693882920");
+		dict.Set("origin", "10452.56 -2776.22 1.25");
+		dict.Set("classname", "char_marine_npc_voss_airdefense");
+		break;
+	case 1:
+		dict.Set("angle", "1693964840");
+		dict.Set("origin", "10418.2 -2745.65 1.25");
+		dict.Set("classname", "char_marine_npc_sledge_airdefense");
+		break;
+	case 2:
+		dict.Set("angle", "1693899304");
+		dict.Set("origin", "10455.62 -2655.08 1.25");
+		dict.Set("classname", "char_marine_npc_cortez_airdefense");
+		break;
+	case 3:
+		dict.Set("angle", "1693936168");
+		dict.Set("origin", "10444.95 -2718.97 1.25");
+		dict.Set("classname", "char_marine_npc_bidwell_airdefense");
+		break;
+	case 4:
+		dict.Set("angle", "1693866536");
+		dict.Set("origin", "10419.44 -2692.75 1.25");
+		dict.Set("classname", "char_marine_npc_morris_airdefense");
+		break;
+	default: 
+		gameLocal.Printf("Wtf going on");
+	}
+	
+	gameLocal.SpawnEntityDef(dict, &newEnt);
+	hungry[recipe] = newEnt->name.c_str();
+	if (newEnt) {
+		gameLocal.Printf("spawned entity '%s'\n", hungry[recipe]);
+	}
+	//end
 }
 
 /*
@@ -227,28 +248,99 @@ stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
 		}
 		//me
 		//gameLocal.Printf("Weapons: %d", player->inventory.weapons);
+		idEntity* newEnt = NULL;
 		if (player->inventory.weapons == 1049) { //cooking
 			gameLocal.Printf("Pizza Cooked\n");
-			idEntity* ent = gameLocal.FindEntity(""); //find the exact name of the monster spawned
-			if (!ent) {
-				gameLocal.Printf("Nobody asked for a pizza.\n");
-			}
-			else {
-				delete ent;
-			}
-
+			dict.Set("angle", "1695001128");
+			dict.Set("origin", "10664.11 -3138.3 1.25");
+			dict.Set("classname", "weapon_grenadelauncher"); //tomato
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			gameLocal.Printf("Pizza Cooked\n");
+			dict.Set("angle", "1694575144");
+			dict.Set("origin", "10615.03 -3143.7 1.25");
+			dict.Set("classname", "weapon_hyperblaster"); //bread
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "1694624296");
+			dict.Set("origin", "10560.41 -3140.67 1.25");
+			dict.Set("classname", "weapon_napalmgun"); //cheese
+			gameLocal.SpawnEntityDef(dict, &newEnt);
 		}
 		else if (player->inventory.weapons == 1039) { //grilling
 			gameLocal.Printf("Burger Grilled\n");
+			dict.Set("angle", "1694575144");
+			dict.Set("origin", "10615.03 -3143.7 1.25");
+			dict.Set("classname", "weapon_hyperblaster"); //bread
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "1685940776");
+			dict.Set("origin", "10511.74 -3134.48 1.25");
+			dict.Set("classname", "weapon_machinegun"); //lettuce
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "1694624296");
+			dict.Set("origin", "10560.41 -3140.67 1.25");
+			dict.Set("classname", "weapon_napalmgun"); //cheese
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "169462496");
+			dict.Set("origin", "10469.22 -3005.57 1.25");
+			dict.Set("classname", "weapon_shotgun"); //beef
+			gameLocal.SpawnEntityDef(dict, &newEnt);
 		}
 		else if (player->inventory.weapons == 737) { //baking
 			gameLocal.Printf("Cake Baked\n");
+			dict.Set("angle", "1685908008");
+			dict.Set("origin", "10467.6 -3141.33 1.25");
+			dict.Set("classname", "weapon_nailgun"); //flour
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "1685957160");
+			dict.Set("origin", "10418.51 -3139.44 1.25");
+			dict.Set("classname", "weapon_railgun"); //sugar
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "1694525992");
+			dict.Set("origin", "10370.97 -3142.44 1.25");
+			dict.Set("classname", "weapon_rocketlauncher"); //eggs
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "1694558760");
+			dict.Set("origin", "10372.06 -3011.14 1.25");
+			dict.Set("classname", "weapon_dmg"); //milk
+			gameLocal.SpawnEntityDef(dict, &newEnt);
 		}
 		else if (player->inventory.weapons == 275) { //chopping
 			gameLocal.Printf("Salad Tossed\n");
+			dict.Set("angle", "1695001128");
+			dict.Set("origin", "10664.11 -3138.3 1.25");
+			dict.Set("classname", "weapon_grenadelauncher"); //tomato
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "1685940776");
+			dict.Set("origin", "10511.74 -3134.48 1.25");
+			dict.Set("classname", "weapon_machinegun"); //lettuce
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "1694509608");
+			dict.Set("origin", "10420.27 -3009.3 1.25");
+			dict.Set("classname", "weapon_lightninggun"); //berries
+			gameLocal.SpawnEntityDef(dict, &newEnt);
 		}
 		else if (player->inventory.weapons == 769) { //blending
 			gameLocal.Printf("Smoothie Blended\n");
+			dict.Set("angle", "1694558760");
+			dict.Set("origin", "10372.06 -3011.14 1.25");
+			dict.Set("classname", "weapon_dmg"); //milk
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			dict.Set("angle", "1694509608");
+			dict.Set("origin", "10420.27 -3009.3 1.25");
+			dict.Set("classname", "weapon_lightninggun"); //berries
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			/*
+			if (hungry[4] != NULL) {
+				gameLocal.Printf("Hungry guy: %s\n", hungry[4]);
+				idEntity* ent = gameLocal.FindEntity(hungry[4]); //find the exact name of the hungry guy
+				gameLocal.Printf("%s removed.\n", hungry[4]);
+				if (!ent) {
+					gameLocal.Printf("Nobody asked for a smoothie.\n");
+				}
+				else {
+					delete ent;
+				}
+			}
+			*/
 		}
 		else {
 			gameLocal.Printf("None\n");

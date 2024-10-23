@@ -36,6 +36,10 @@ protected:
 	int						soundStartTime;
 	int						soundLength;
 
+	const char*				hungry[5];
+	idDict					dict;
+	idPlayer*				player;
+
 private:
 
 	bool					IsPlaying					( void );
